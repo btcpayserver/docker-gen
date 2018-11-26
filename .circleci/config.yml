@@ -24,10 +24,6 @@ jobs:
             LATEST_TAG=${CIRCLE_TAG:1} #trim v from tag
             # Make sure the builder is copy the arm emulator
             sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
-            sudo apt update
-            sudo apt install -y qemu qemu-user-static qemu-user binfmt-support
-            sudo cp /usr/bin/qemu-arm-static "$(dirname "linuxarm32v7.Dockerfile")/qemu-arm-static"
-            sed -i -e 's/#EnableQEMU //g' "linuxarm32v7.Dockerfile"
             #
             sudo docker build --pull -t $DOCKERHUB_REPO:$LATEST_TAG-arm32v7 -f linuxarm32v7.Dockerfile .
             sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
