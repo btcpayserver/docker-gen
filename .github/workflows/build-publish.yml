@@ -6,18 +6,13 @@ permissions:
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 1"
   push:
-    branches:
-      - main
     tags:
       - "*.*.*"
     paths:
       - ".dockerignore"
       - ".github/workflows/build-publish.yml"
       - "Dockerfile.alpine"
-      - "Dockerfile.debian"
       - "go.mod"
       - "go.sum"
       - "**.go"
@@ -27,7 +22,7 @@ jobs:
     name: Build and publish image
     strategy:
       matrix:
-        base: [alpine, debian]
+        base: [alpine]
     runs-on: ubuntu-latest
     if: (github.event_name == 'schedule' && github.repository == 'nginx-proxy/docker-gen') || (github.event_name != 'schedule')
     steps:
@@ -45,9 +40,7 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: |
-            ghcr.io/nginx-proxy/docker-gen
-            nginxproxy/docker-gen
-            jwilder/docker-gen
+            btcpayserver/docker-gen
           tags: |
             type=semver,pattern={{version}},enable=${{ matrix.base == 'alpine' }}
             type=semver,pattern={{major}}.{{minor}},enable=${{ matrix.base == 'alpine' }}
@@ -86,7 +79,7 @@ jobs:
         with:
           context: .
           build-args: DOCKER_GEN_VERSION=${{ steps.docker-gen_version.outputs.VERSION }}
-          platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
           file: Dockerfile.${{ matrix.base }}
           sbom: true
           push: true

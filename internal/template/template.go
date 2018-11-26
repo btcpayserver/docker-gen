@@ -23,6 +23,21 @@ import (
 	"github.com/nginx-proxy/docker-gen/internal/utils"
 )
 
+func read(path string) (string, error) {
+	_, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return "", nil
+		}
+		return "", err
+	}
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
 func getArrayValues(funcName string, entries interface{}) (*reflect.Value, error) {
 	entriesVal := reflect.ValueOf(entries)
 
@@ -64,6 +79,7 @@ func newTemplate(name string) *template.Template {
 	tmpl.Funcs(sprigFuncMap).Funcs(template.FuncMap{
 		"closest":                 arrayClosest,
 		"coalesce":                coalesce,
+		"coalesceempty":           coalesceempty,
 		"comment":                 comment,
 		"contains":                contains,
 		"dir":                     dirList,
@@ -78,6 +94,7 @@ func newTemplate(name string) *template.Template {
 		"include":                 include,
 		"intersect":               intersect,
 		"keys":                    keys,
+		"read":                    read,
 		"replace":                 strings.Replace,
 		"parseBool":               strconv.ParseBool,
 		"fromYaml":                fromYaml,
