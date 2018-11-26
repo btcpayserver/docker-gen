@@ -1,6 +1,8 @@
 FROM arm32v6/alpine:3.8
 LABEL maintainer="Jason Wilder <mail@jasonwilder.com>"
 
+#EnableQEMU COPY qemu-arm-static /usr/bin
+
 RUN apk -U add openssl
 
 ENV VERSION 0.7.4
