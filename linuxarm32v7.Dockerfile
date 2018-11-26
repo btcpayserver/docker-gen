@@ -2,8 +2,6 @@
 FROM debian:stretch-slim as builder
 LABEL maintainer="Jason Wilder <mail@jasonwilder.com>"
 
-#EnableQEMU COPY qemu-arm-static /usr/bin
-
 RUN set -ex \
 	&& apt-get update \
 	&& apt-get install -qq --no-install-recommends ca-certificates wget
