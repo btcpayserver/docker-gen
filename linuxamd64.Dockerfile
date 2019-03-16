@@ -15,7 +15,7 @@ FROM alpine:3.8
 
 COPY --from=builder /usr/local/bin/docker-gen /usr/local/bin/docker-gen
 
-ENV VERSION 0.7.4
+ENV VERSION 0.7.5
 ENV DOCKER_HOST unix:///tmp/docker.sock
 
 ENTRYPOINT ["/usr/local/bin/docker-gen"]
