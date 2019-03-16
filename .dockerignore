@@ -1,4 +1,4 @@
-.git
 docker-gen
+.dockerignore
 dist
 *.gz
