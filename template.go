@@ -98,7 +98,9 @@ func groupByMulti(entries interface{}, key, sep string) (map[string][]interface{
 	return generalizedGroupByKey("groupByMulti", entries, key, func(groups map[string][]interface{}, value interface{}, v interface{}) {
 		items := strings.Split(value.(string), sep)
 		for _, item := range items {
-			groups[item] = append(groups[item], v)
+			if item != "" {
+				groups[item] = append(groups[item], v)
+			}
 		}
 	})
 }
