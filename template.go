@@ -411,6 +411,16 @@ func coalesce(input ...interface{}) interface{} {
 	return nil
 }
 
+// coalesceempty returns the first non nil argument or empty
+func coalesceempty(input ...interface{}) interface{} {
+	for _, v := range input {
+		if v != nil && len(fmt.Sprintf("%v", v)) > 0 {
+			return v
+		}
+	}
+	return nil
+}
+
 // trimPrefix returns a string without the prefix, if present
 func trimPrefix(prefix, s string) string {
 	return strings.TrimPrefix(s, prefix)
@@ -439,6 +449,7 @@ func newTemplate(name string) *template.Template {
 	tmpl := template.New(name).Funcs(template.FuncMap{
 		"closest":                arrayClosest,
 		"coalesce":               coalesce,
+		"coalesceempty":          coalesceempty,
 		"contains":               contains,
 		"dict":                   dict,
 		"dir":                    dirList,
