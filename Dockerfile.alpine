@@ -1,7 +1,7 @@
 ARG DOCKER_GEN_VERSION=main
 
 # Build docker-gen from scratch
-FROM --platform=$BUILDPLATFORM golang:1.26.5-alpine AS go-builder
+FROM --platform=$BUILDPLATFORM golang:1.26.10-alpine AS go-builder
 
 ENV CGO_ENABLED=0
 
@@ -31,7 +31,9 @@ ENV DOCKER_GEN_VERSION=${DOCKER_GEN_VERSION} \
     DOCKER_HOST=unix:///tmp/docker.sock
 
 # Install packages required by the image
-RUN apk add --no-cache --virtual .bin-deps openssl
+RUN apk add --no-cache --virtual .bin-deps \
+    "ca-certificates>=20261020-r0" \
+    openssl
 
 # Copy the entrypoint script
 COPY /app/docker-entrypoint.sh /app/docker-entrypoint.sh
