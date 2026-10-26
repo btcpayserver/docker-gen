@@ -120,6 +120,24 @@ func TestInclude(t *testing.T) {
 	assert.Equal(t, "some string", data)
 }
 
+func TestRead(t *testing.T) {
+	data, err := read("some_random_file")
+	assert.NoError(t, err)
+	assert.Empty(t, data)
+
+	f, err := os.CreateTemp("", "docker-gen-test-read")
+	assert.NoError(t, err)
+	defer os.Remove(f.Name())
+
+	_, err = f.WriteString("some string")
+	assert.NoError(t, err)
+	assert.NoError(t, f.Close())
+
+	data, err = read(f.Name())
+	assert.NoError(t, err)
+	assert.Equal(t, "some string", data)
+}
+
 func TestIntersect(t *testing.T) {
 	i := intersect([]string{"foo.fo.com", "bar.com"}, []string{"foo.bar.com"})
 	assert.Len(t, i, 0, "Expected no match")
@@ -263,5 +281,13 @@ func TestCoalesce(t *testing.T) {
 	assert.Equal(t, "second", v, "Expected second value")
 
 	v = coalesce(nil, nil, nil)
+	assert.Nil(t, v, "Expected nil value")
+}
+
+func TestCoalesceEmpty(t *testing.T) {
+	v := coalesceempty(nil, "", "third")
+	assert.Equal(t, "third", v, "Expected first non-empty value")
+
+	v = coalesceempty(nil, "", nil)
 	assert.Nil(t, v, "Expected nil value")
 }

@@ -167,7 +167,7 @@ func TestGroupByMulti(t *testing.T) {
 		},
 		{
 			Env: map[string]string{
-				"VIRTUAL_HOST": "demo2.localhost",
+				"VIRTUAL_HOST": "demo2.localhost,",
 			},
 			ID: "3",
 		},
